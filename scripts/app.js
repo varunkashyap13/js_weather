@@ -3,6 +3,7 @@ const card = document.querySelector(".card");
 const details = document.querySelector(".details");
 const time = document.querySelector("img.time");
 const icon = document.querySelector(".icon img");
+const forecast = new Forecast();
 
 const updateUI = (data) => {
   //   const cityDets = data.cityDets;
@@ -38,20 +39,20 @@ const updateUI = (data) => {
   }
 };
 
-const updateCity = async (city) => {
-  // using await bc getCity is an async function
-  // can call these external functions bc forecast.js comes before app.js in html
-  const cityDets = await getCity(city);
-  const weather = await getWeather(cityDets.Key);
+// const updateCity = async (city) => {
+//   // using await bc getCity is an async function
+//   // can call these external functions bc forecast.js comes before app.js in html
+//   const cityDets = await getCity(city);
+//   const weather = await getWeather(cityDets.Key);
 
-  return {
-    // cityDets: cityDets,
-    // weather: weather,
-    // bc both names are the same can do the following:
-    cityDets,
-    weather,
-  };
-};
+//   return {
+//     // cityDets: cityDets,
+//     // weather: weather,
+//     // bc both names are the same can do the following:
+//     cityDets,
+//     weather,
+//   };
+// };
 
 cityForm.addEventListener("submit", (e) => {
   // prevent default action
@@ -62,7 +63,8 @@ cityForm.addEventListener("submit", (e) => {
   cityForm.reset();
 
   //update ui with new city
-  updateCity(city)
+  forecast
+    .updateCity(city)
     .then((data) => {
       updateUI(data);
     })
@@ -73,7 +75,7 @@ cityForm.addEventListener("submit", (e) => {
 
 //automatically runs
 if (localStorage.getItem("city")) {
-  updateCity(localStorage.getItem("city")).then((data) => {
+  forecast.updateCity(localStorage.getItem("city")).then((data) => {
     updateUI(data);
   });
 }
